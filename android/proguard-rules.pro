@@ -1,0 +1,1 @@
+-keep class ai.nextbillion.nb_asset_tracking_flutter.** { *; }

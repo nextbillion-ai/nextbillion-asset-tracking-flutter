@@ -1,0 +1,85 @@
+#See https://dart.dev/guides/libraries/private-files
+
+#files&dirs created by pub:
+#.dart_tool/ and .packags are new in Dart 2
+.dart_tool/
+.packages
+.bundle
+build/
+
+
+# local flutter sdk symlink used by fvm
+.fvm/
+
+#API Docs created by dartdoc:
+doc/api/
+
+# add a ignore folder
+lib/ignore
+
+# Dev Environments
+*.iml         // IntelliJ
+*.ipr         // IntelliJ
+*.iws         // IntelliJ
+.idea/        // IntelliJ
+.DS_Store     // Mac
+
+# dev_server/.DS_Store     // Mac
+
+ios/.generated/
+ios/Podfile\.lock
+
+
+#bundles
+
+
+# Flutter/Dart/Pub related
+**/doc/api/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+
+*.mode1v3
+*.mode2v3
+*.moved-aside
+*.pbxuser
+*.perspectivev3
+**/*sync/
+.sconsign.dblite
+.tags*
+**/.vagrant/
+**/DerivedData/
+Icon?
+**/Pods/
+**/.symlinks/
+profile
+xcuserdata
+**/.generated/
+**/Flutter/App.framework
+**/Flutter/Flutter.framework
+**/Flutter/Flutter.podspec
+**/Flutter/Generated.xcconfig
+**/Flutter/app.flx
+**/Flutter/app.zip
+**/Flutter/flutter_assets/
+**/Flutter/flutter_export_environment.sh
+**/ServiceDefinitions.json
+**/Runner/GeneratedPluginRegistrant.*
+
+# Exceptions to above rules.
+!default.mode1v3
+!default.mode2v3
+!default.pbxuser
+!default.perspectivev3
+
+pubspec.lock
+.dart_tool
+.idea/
+example/pubspec.lock
+example/ios/Podfile.lock
+ios/Cartfile.resolved
+ios/Framework/
