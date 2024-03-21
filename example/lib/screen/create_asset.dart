@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
-import 'package:nb_asset_tracking_flutter_example/toast_mixin.dart';
+import 'package:nb_asset_tracking_flutter_example/util/toast_mixin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-import 'consts.dart';
+import '../util/consts.dart';
 
 class CreateAssteScreen extends StatefulWidget {
   const CreateAssteScreen({super.key});
@@ -76,7 +76,7 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
         customId: customId, name: assetName, description: description, attributes: {attribute1: attribute2});
     AssetResult result = await assetTracking.createAsset(profile: profile);
     if (result.success) {
-      showToast("Asset ${result.data} create success");
+      showToast("Create asset successfully with asset id ${result.data}");
       _assetBindIDTextController.text = result.data;
     } else {
       showToast("Create asset failed: ${result.msg ?? ""}");
@@ -86,9 +86,8 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
   Future<void> bindAsset() async {
     String assetId = _assetBindIDTextController.text;
     AssetResult result = await assetTracking.bindAsset(customId: assetId);
-
     if (result.success) {
-      showToast("Asset ${result.data} bind success");
+      showToast("Bind asset successfully with asset id ${result.data}");
       saveData(result.data);
       Navigator.of(context).pop();
     } else {

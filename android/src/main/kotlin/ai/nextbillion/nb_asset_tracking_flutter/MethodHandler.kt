@@ -22,12 +22,10 @@ class MethodHandler( private val channel: MethodChannel) :
 
     fun addDataListener(activity: Activity) {
         activity.assetTrackingAddCallback(this)
-        System.out.println("check demo addDataListener")
     }
 
     fun removeDataListener(activity: Activity) {
         activity.assetTrackingRemoveCallback(this)
-        System.out.println("check demo removeDataListener")
     }
 
     fun dispatchMethodHandler(
@@ -64,12 +62,12 @@ class MethodHandler( private val channel: MethodChannel) :
                     override fun onSuccess(result: GetAssetResponse) {
                         val asset: Asset = result.data.asset
                         val assetJsonString = Gson().toJson(asset)
-                        methodResult.success(AssetResult(success = true,assetJsonString, msg = "").toJson())
+                        methodResult.success(AssetResult(success = true, assetJsonString, msg = "").toJson())
                     }
 
                     override fun onFailure(exception: AssetException) {
                         val exceptionMessage = exception.message ?: ""
-                        methodResult.success(AssetResult(success = false,exception.errorCode, msg = exceptionMessage).toJson())
+                        methodResult.success(AssetResult(success = false,exception.errorCode.toString(), msg = exceptionMessage).toJson())
                     }
                 })
             }
@@ -83,7 +81,7 @@ class MethodHandler( private val channel: MethodChannel) :
                 activity.assetTrackingSetNotificationConfig(config)
                 methodResult.success(AssetResult(success = true,"", msg = "").toJson())
             }
-            "geAndroidNotificationConfig" -> {
+            "getAndroidNotificationConfig" -> {
                 val config = activity.assetTrackingGetNotificationConfig()
                 val json = ConfigConverter.notificationConfigToJson(config)
                 methodResult.success(AssetResult(success = true,json, msg = "").toJson())
@@ -119,6 +117,22 @@ class MethodHandler( private val channel: MethodChannel) :
             }
             "isTracking" -> {
                 methodResult.success(AssetResult(success = true,activity.assetTrackingIsRunning, msg = "").toJson())
+            }
+            "updateAsset" -> {
+                val profileString = call.arguments as String
+                val profile = ConfigConverter.assetProfileFromJson(profileString)
+                activity.updateAssetInfo(profile,object : AssetApiCallback<Unit> {
+
+                    override fun onSuccess(result: Unit) {
+                        methodResult.success(AssetResult(success = true, profile.customId, msg = result.toString()).toJson())
+                    }
+
+                    override fun onFailure(exception: AssetException) {
+                        val exceptionMessage = exception.message ?: ""
+                        val errorCode = exception.errorCode
+                        methodResult.success(AssetResult(success = false,errorCode.toString(), msg = exceptionMessage).toJson())
+                    }
+                })
             }
             "createAsset" -> {
                 val profileString = call.arguments as String
@@ -242,7 +256,6 @@ class MethodHandler( private val channel: MethodChannel) :
     }
 
     override fun onLocationSuccess(location: Location) {
-        System.out.println("check demo onLocationSuccess: ${location.toString()}")
         channel.invokeMethod("onLocationSuccess",AssetResult(
             success = true,
             ConfigConverter.convertLocationToMap(location),
@@ -251,7 +264,6 @@ class MethodHandler( private val channel: MethodChannel) :
     }
 
     override fun onTrackingStart(assetId: String) {
-        System.out.println("check demo onTrackingStart: $assetId")
         channel.invokeMethod("onTrackingStart",AssetResult(
             success = true,
             assetId,
@@ -260,7 +272,6 @@ class MethodHandler( private val channel: MethodChannel) :
     }
 
     override fun onTrackingStop(assetId: String, trackingDisableType: TrackingDisableType) {
-        System.out.println("check demo onTrackingStop: $assetId")
         channel.invokeMethod("onTrackingStop",AssetResult(
             success = true,
             assetId,

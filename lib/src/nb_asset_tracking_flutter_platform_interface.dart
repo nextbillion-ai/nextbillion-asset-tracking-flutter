@@ -45,6 +45,10 @@ abstract class NbAssetTrackingFlutterPlatform extends PlatformInterface {
      throw UnimplementedError('getAssetId() has not been implemented.');
    }
 
+   Future<String> updateAsset({required AssetProfile assetProfile}) {
+     throw UnimplementedError('updateAsset() has not been implemented.');
+   }
+
    Future<String> getAssetDetail() {
      throw UnimplementedError('getAssetId() has not been implemented.');
    }

@@ -16,6 +16,7 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
         let assetTracking = AssetTracking.shared
         switch call.method {
         case "initialize":
+            assetTracking.delegate = self
             if let accessKey = call.arguments as? String {
                 assetTracking.initialize(apiKey: accessKey)
                 result(AssetResult(success: true, data: accessKey, msg: "").toJson())
@@ -26,11 +27,21 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
             
         case "getAssetDetail":
             assetTracking.getAssetDetail(completionHandler: {response in
-                result(AssetResult(success: true, data: Convert.toJson(T: response.data), msg: "").toJson())
+                let json = Convert.toJson(T: response.data)
+                result(AssetResult(success: true, data: json, msg: "").toJson())
                 
             }, errorHandler: { error in
                 result(AssetResult(success: false, data: String(error.errorCode), msg: error.message).toJson())
             })
+        case "updateAsset":
+            if let profileJson = call.arguments as? String,
+               let assetProfile: AssetProfile = Convert.decodeAssetProfileJson(profileJson: profileJson) {
+                assetTracking.updateAsset(assetProfile: assetProfile, completionHandler: {unit in
+                    result(AssetResult(success: true, data: "", msg: "").toJson())
+                }, errorHandler: {error in
+                    result(AssetResult(success: false, data: String(error.errorCode), msg: error.message).toJson())
+                })
+            }
         case "setIOSNotificationConfig":
             if let configJson = call.arguments as? String,
                let data = Convert.decodeNotificationConfigJson(configJson: configJson) {
@@ -38,7 +49,7 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
                 result(AssetResult(success: true, data: "", msg: "").toJson())
             }
             
-        case "geIOSNotificationConfig":
+        case "getIOSNotificationConfig":
             let notificationConfig = assetTracking.getNotificationConfig()
             let nofigicationJson = Convert.toJson(T: notificationConfig)
             result(AssetResult(success: true, data: nofigicationJson, msg: "").toJson())
@@ -75,8 +86,8 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
             
         case "isTracking":
             let isTracking = assetTracking.isRunning()
-            result(isTracking)
-            
+            result(AssetResult(success: true, data: isTracking, msg: "").toJson())
+
         case "createAsset":
             if let profileJson = call.arguments as? String,
                let assetProfile = Convert.decodeAssetProfileJson(profileJson: profileJson) {
@@ -107,7 +118,6 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
             }
             
         case "startTracking":
-            assetTracking.delegate = self
             assetTracking.startTracking()
             result(AssetResult(success: true, data: "", msg: "").toJson())
             
