@@ -66,6 +66,11 @@ class MethodChannelNbAssetTrackingFlutter
   }
 
   @override
+  Future<String> updateAsset({required AssetProfile assetProfile}) async {
+    return await methodChannel.invokeMethod("updateAsset", assetProfile.encode());
+  }
+
+  @override
   Future<String> getAssetDetail() async {
     return await methodChannel.invokeMethod("getAssetDetail");
   }
@@ -83,12 +88,13 @@ class MethodChannelNbAssetTrackingFlutter
   @override
   Future<void> setAndroidNotificationConfig(
       {required AndroidNotificationConfig config}) async {
-    await methodChannel.invokeMethod("setAndroidNotificationConfig",config.encode());
+    String encode = config.encode();
+    await methodChannel.invokeMethod("setAndroidNotificationConfig", encode);
   }
 
   @override
   Future<String> getAndroidNotificationConfig() async {
-    return  await methodChannel.invokeMethod("geAndroidNotificationConfig");
+    return  await methodChannel.invokeMethod("getAndroidNotificationConfig");
   }
 
   @override
@@ -99,7 +105,7 @@ class MethodChannelNbAssetTrackingFlutter
 
   @override
   Future<String> getIOSNotificationConfig() async {
-    return  await methodChannel.invokeMethod("geIOSNotificationConfig");
+    return  await methodChannel.invokeMethod("getIOSNotificationConfig");
   }
 
   @override

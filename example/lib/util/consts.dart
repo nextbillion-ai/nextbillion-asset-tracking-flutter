@@ -1,6 +1,8 @@
 
 import 'dart:io';
 
+const accessKey = "YOUR ACCESS KEY";
+
 const keyOfBoundId = "key_of_bind_id";
 const keyOfFakeGpsFlag = "key_of_fake_gps_flag";
 const keyOfEnableTrackingStartedNotification = "key_of_enable_tracking_started_notification";

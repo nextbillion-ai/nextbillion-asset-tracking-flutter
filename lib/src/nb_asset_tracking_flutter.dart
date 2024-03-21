@@ -1,9 +1,9 @@
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
+import 'package:nb_asset_tracking_flutter/src/asset_detail_info.dart';
 import 'native_result_callback.dart';
 import 'nb_asset_tracking_flutter_platform_interface.dart';
 
 class AssetTracking {
-
   final List<OnTrackingDataCallBack> _listeners = [];
 
   late NativeResultCallback _nativeCallbacks;
@@ -12,7 +12,7 @@ class AssetTracking {
 
   static final AssetTracking _instance = AssetTracking._internal();
 
-  AssetTracking._internal(){
+  AssetTracking._internal() {
     _platform = NbAssetTrackingFlutterPlatform.instance;
     initNativeCallbacks();
     _platform.setupResultCallBack(_nativeCallbacks);
@@ -30,7 +30,6 @@ class AssetTracking {
     _listeners.add(callback);
   }
 
-
   void removeDataListener(OnTrackingDataCallBack callback) {
     _listeners.remove(callback);
   }
@@ -38,7 +37,6 @@ class AssetTracking {
   void removeAllDataListener() {
     _listeners.clear();
   }
-
 
   Future<void> startTracking() async {
     await NbAssetTrackingFlutterPlatform.instance.startTracking();
@@ -49,11 +47,16 @@ class AssetTracking {
   }
 
   Future<AssetResult<String>> getAssetId() async {
-    String jsonString =  await _platform.getAssetId();
+    String jsonString = await _platform.getAssetId();
     return AssetResult.fromJson(jsonString);
   }
 
-  Future<AssetResult<Map>> getAssetDetail() async {
+  Future<AssetResult<String>> updateAsset({required AssetProfile assetProfile}) async {
+    String jsonString = await _platform.updateAsset(assetProfile: assetProfile);
+    return AssetResult.fromJson(jsonString);
+  }
+
+  Future<AssetResult<AssetDetailInfo>> getAssetDetail() async {
     String jsonString = await _platform.getAssetDetail();
     return AssetResult.fromJson(jsonString);
   }
@@ -63,12 +66,17 @@ class AssetTracking {
   }
 
   Future<AssetResult<DefaultConfig>> getDefaultConfig() async {
-     String jsonString = await _platform.getDefaultConfig();
-     return AssetResult.fromJson(jsonString);
+    String jsonString = await _platform.getDefaultConfig();
+    return AssetResult.fromJson(jsonString);
   }
 
   Future<void> setAndroidNotificationConfig({required AndroidNotificationConfig config}) async {
     await _platform.setAndroidNotificationConfig(config: config);
+  }
+
+  Future<AssetResult<AndroidNotificationConfig>> getAndroidNotificationConfig() async {
+    String json = await _platform.getAndroidNotificationConfig();
+    return AssetResult.fromJson(json);
   }
 
   Future<void> setIOSNotificationConfig({required IOSNotificationConfig config}) async {
@@ -112,22 +120,22 @@ class AssetTracking {
   }
 
   Future<AssetResult<bool>> isTracking() async {
-    String jsonString =  await _platform.isTracking();
+    String jsonString = await _platform.isTracking();
     return AssetResult.fromJson(jsonString);
   }
 
   Future<AssetResult<String>> createAsset({required AssetProfile profile}) async {
-    String jsonString  = await _platform.createAsset(profile: profile);
+    String jsonString = await _platform.createAsset(profile: profile);
     return AssetResult.fromJson(jsonString);
   }
 
   Future<AssetResult<String>> bindAsset({required String customId}) async {
-    String jsonString  = await _platform.bindAsset(customId: customId);
+    String jsonString = await _platform.bindAsset(customId: customId);
     return AssetResult.fromJson(jsonString);
   }
 
   Future<AssetResult<String>> forceBindAsset({required String customId}) async {
-    String jsonString  = await _platform.forceBindAsset(customId: customId);
+    String jsonString = await _platform.forceBindAsset(customId: customId);
     return AssetResult.fromJson(jsonString);
   }
 
@@ -155,6 +163,4 @@ class AssetTracking {
       },
     );
   }
-
-
 }

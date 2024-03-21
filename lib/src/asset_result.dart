@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
+import 'package:nb_asset_tracking_flutter/src/asset_detail_info.dart';
 import 'package:nb_asset_tracking_flutter/src/low_battery_notification_config.dart';
 
 class AssetResult<T> {
@@ -28,6 +29,8 @@ class AssetResult<T> {
       entity = AndroidNotificationConfig.fromJson(data) as T;
     } else if (T == IOSNotificationConfig) {
       entity = IOSNotificationConfig.fromJson(data) as T;
+    } else if (T == AssetDetailInfo) {
+      entity = AssetDetailInfo.fromJson(data) as T;
     } else {
       entity = data as T;
     }

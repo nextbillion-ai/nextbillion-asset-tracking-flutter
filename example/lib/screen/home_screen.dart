@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
-import 'package:nb_asset_tracking_flutter_example/permiss_checker.dart';
-import 'package:nb_asset_tracking_flutter_example/toast_mixin.dart';
+import 'package:nb_asset_tracking_flutter_example/util/permiss_checker.dart';
+import 'package:nb_asset_tracking_flutter_example/util/toast_mixin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'consts.dart';
+import '../util/consts.dart';
 import 'create_asset.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -33,8 +33,7 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
   @override
   void initState() {
     super.initState();
-    assetTracking.initialize(apiKey: "YOUR ACCESS KEY");
-
+    assetTracking.initialize(apiKey: accessKey);
     Stream<AssetResult> statusStream = assetTracking.isTracking().asStream();
     statusStream.listen((value) {
       _isRunning = value.data;
@@ -43,6 +42,7 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
 
     assetTracking.addDataListener(this);
     initSharedPreferences();
+    bindExistAssetId();
   }
 
   Future initSharedPreferences() async {
@@ -67,6 +67,23 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
       isAllowMockLocation = allow;
       selectedOption = mode;
     });
+  }
+
+  void bindExistAssetId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? boundId = prefs.getString(keyOfBoundId);
+
+    if (boundId == null) {
+      return;
+    }
+
+    AssetResult result = await assetTracking.bindAsset(customId: boundId);
+    if (!result.success) {
+      showToast("bind asset failed: ${result.msg}");
+      return;
+    } else {
+      showToast("Bind asset successfully with id: ${result.data}");
+    }
   }
 
   @override
@@ -99,11 +116,6 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
 
     if (boundId == null) {
       showToast("You mast bind a asset Id first");
-      return;
-    }
-    AssetResult result = await assetTracking.bindAsset(customId: boundId);
-    if (!result.success) {
-      showToast("bind asset failed: ${result.msg}");
       return;
     }
 
@@ -383,7 +395,12 @@ class _MyAppState extends State<HomeScreen> with ToastMixin implements OnTrackin
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      AssetResult assetResult = await assetTracking.isTracking();
+                      if(assetResult.data) {
+                        Fluttertoast.showToast(msg: "please stop tracking before editing asset profile");
+                        return;
+                      }
                       pushToCreateAsset();
                     },
                     child: const Text('Create new Asset'),

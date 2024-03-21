@@ -4,6 +4,7 @@ import ai.nextbillion.assettracking.entity.DataTrackingConfig
 import ai.nextbillion.assettracking.entity.LocationConfig
 import ai.nextbillion.assettracking.entity.LowBatteryNotificationConfig
 import ai.nextbillion.assettracking.entity.NotificationConfig
+import ai.nextbillion.assettracking.location.engine.DesiredAccuracy
 import ai.nextbillion.assettracking.location.engine.TrackingMode
 import ai.nextbillion.network.AssetProfile
 import android.location.Location
@@ -91,6 +92,23 @@ object ConfigConverter {
             json[key] = value
         }
 
+        val desiredAccuracy:DesiredAccuracy = when (json["desiredAccuracy"]) {
+            "high" -> {
+                DesiredAccuracy.HIGH
+            }
+
+            "medium" -> {
+                DesiredAccuracy.BALANCED
+            }
+
+            "low" -> {
+                DesiredAccuracy.LOW
+            }
+            else -> {
+                DesiredAccuracy.HIGH
+            }
+        }
+
         when (json["trackingMode"]) {
             "active" -> {
                 return LocationConfig(TrackingMode.ACTIVE)
@@ -105,6 +123,7 @@ object ConfigConverter {
                 return LocationConfig(
                     interval = (json["interval"] as Int).toLong(),
                     smallestDisplacement = (json["smallestDisplacement"] as Double).toFloat(),
+                    desiredAccuracy = desiredAccuracy,
                     maxWaitTime = (json["maxWaitTime"] as Int).toLong(),
                     fastestInterval = (json["fastestInterval"] as Int).toLong(),
                     enableStationaryCheck = json["enableStationaryCheck"] as Boolean,
@@ -133,6 +152,24 @@ object ConfigConverter {
             }
         }
 
+        val desiredAccuracy: String = when (config.desiredAccuracy) {
+            DesiredAccuracy.HIGH -> {
+                "high"
+            }
+
+            DesiredAccuracy.BALANCED -> {
+                "medium"
+            }
+
+            DesiredAccuracy.LOW -> {
+                "low"
+            }
+
+            else -> {
+                "high"
+            }
+        }
+
         val map = mapOf(
             "trackingMode" to trackingMode,
             "interval" to config.interval,
@@ -140,6 +177,7 @@ object ConfigConverter {
             "maxWaitTime" to config.maxWaitTime,
             "fastestInterval" to config.fastestInterval,
             "enableStationaryCheck" to config.enableStationaryCheck,
+            "desiredAccuracy" to desiredAccuracy,
         )
         return gson.toJson(map, Map::class.java)
     }

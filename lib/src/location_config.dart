@@ -35,7 +35,7 @@ class LocationConfig with NBEncode {
 
   /// Only available on Android
   final int? intervalForAndroid;
-  final double? smallestDisplacement;
+  final num? smallestDisplacement;
   final DesiredAccuracy? desiredAccuracy;
 
   /// Only available on Android
@@ -47,7 +47,7 @@ class LocationConfig with NBEncode {
   final bool? enableStationaryCheck;
 
   LocationConfig({
-    this.trackingMode = TrackingMode.custom,
+    this.trackingMode = TrackingMode.active,
     this.intervalForAndroid,
     this.smallestDisplacement,
     this.desiredAccuracy,
@@ -61,7 +61,7 @@ class LocationConfig with NBEncode {
     return LocationConfig(
         trackingMode: TrackingMode.fromString(json['trackingMode']),
         intervalForAndroid: json['interval'] ?? 0,
-        smallestDisplacement: json['smallestDisplacement'] ?? 0.0,
+        smallestDisplacement: json['smallestDisplacement'] ?? 0,
         desiredAccuracy: DesiredAccuracy.fromString(json['desiredAccuracy']),
         maxWaitTimeForAndroid: json['maxWaitTime'] ?? 0,
         fastestIntervalForAndroid: json['fastestInterval'] ?? 0,
