@@ -85,7 +85,6 @@ class LocationConfig with NBEncode {
             fastestIntervalForAndroid: 0,
             enableStationaryCheck: true);
     }
-    return LocationConfig(trackingMode: TrackingMode.active);
   }
 
   factory LocationConfig.activeConfig() {
@@ -109,7 +108,6 @@ class LocationConfig with NBEncode {
     required this.enableStationaryCheck,
   }) : trackingMode = TrackingMode.custom;
 
-  @override
   Map<String, dynamic> toJson() {
     return {
       'trackingMode': trackingMode?.toString().split('.').last,

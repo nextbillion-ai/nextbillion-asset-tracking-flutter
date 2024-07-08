@@ -5,6 +5,9 @@ import 'package:nb_asset_tracking_flutter/src/default_config.dart';
 import 'package:nb_asset_tracking_flutter/src/ios_notification_config.dart';
 import 'package:nb_asset_tracking_flutter/src/location_config.dart';
 import 'package:nb_asset_tracking_flutter/src/android_notification_config.dart';
+import 'package:nb_asset_tracking_flutter/src/trips/trip_profile.dart';
+import 'package:nb_asset_tracking_flutter/src/trips/trip_state.dart';
+import 'package:nb_asset_tracking_flutter/src/trips/trip_update_profile.dart';
 
 import 'asset_profile.dart';
 import 'asset_result.dart';
@@ -47,12 +50,25 @@ class MethodChannelNbAssetTrackingFlutter
       String jsonString = call.arguments;
       AssetResult<String> result = AssetResult.fromJson(jsonString);
       _resultCallback?.onTrackingStop?.call(result.data);
+
+    }else if (call.method == 'onTripStatusChanged') {
+      String jsonString = call.arguments;
+      AssetResult<Map> result = AssetResult.fromJson(jsonString);
+      var tripId = result.data['tripId'];
+      TripState state = TripStateExtension.fromString(result.data['status']);
+      _resultCallback?.onTripStatusChanged?.call(tripId, state);
     }
+
   }
 
   @override
   Future<String> initialize({required String key}) async {
-    return await methodChannel.invokeMethod("initialize",key);
+    return await methodChannel.invokeMethod("initialize", key);
+  }
+
+  @override
+  Future<String> setKeyOfHeaderField({required String key}) async {
+    return await methodChannel.invokeMethod("setKeyOfHeaderField", key);
   }
 
   @override
@@ -174,4 +190,45 @@ class MethodChannelNbAssetTrackingFlutter
   Future<void> stopTracking() async {
     return await methodChannel.invokeMethod("stopTracking");
   }
+
+  @override
+  Future<String> startTrip({required TripProfile profile}) async {
+    return await methodChannel.invokeMethod("startTrip", profile.encode());
+  }
+
+  @override
+  Future<String> endTrip() async {
+    return await methodChannel.invokeMethod("endTrip");
+  }
+
+  @override
+  Future<String> getTrip({required String tripId}) async {
+    return await methodChannel.invokeMethod("getTrip", tripId);
+  }
+
+  @override
+  Future<String> updateTrip({required TripUpdateProfile profile}) async {
+    return await methodChannel.invokeMethod("updateTrip", profile.encode());
+  }
+
+  @override
+  Future<String> getSummary({required String tripId}) async {
+    return await methodChannel.invokeMethod("getSummary", tripId);
+  }
+
+  @override
+  Future<String> deleteTrip({required String tripId}) async {
+    return await methodChannel.invokeMethod("deleteTrip", tripId);
+  }
+
+  @override
+  Future<String> getActiveTripId() async {
+    return await methodChannel.invokeMethod("getActiveTripId");
+  }
+
+  @override
+  Future<String> isTripInProgress() async {
+    return await methodChannel.invokeMethod("isTripInProgress");
+  }
+
 }

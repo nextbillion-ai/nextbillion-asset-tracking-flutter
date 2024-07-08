@@ -10,75 +10,31 @@ import ai.nextbillion.network.AssetProfile
 import android.location.Location
 import com.google.gson.Gson
 import org.json.JSONObject
+import ai.nextbillion.network.trip.TripProfile
+import ai.nextbillion.network.trip.TripUpdateProfile
+import ai.nextbillion.network.trip.entity.Trip
+import ai.nextbillion.network.trip.entity.TripSummary
 
 object ConfigConverter {
 
     fun notificationConfigFromJson(jsonString: String): NotificationConfig {
         val gson = Gson()
         return gson.fromJson(jsonString, NotificationConfig::class.java)
-
-//            return NotificationConfig(
-//                serviceId = (json["serviceId"] as? Int) ?: 10010,
-//                channelId = (json["channelId"] as? String) ?: "NextBillion.AI",
-//                channelName = (json["channelName"] as? String) ?: "NextBillion.AI",
-//                title = (json["title"] as? String) ?: "Default Title",
-//                content = (json["content"] as? String) ?: "Asset tracking start content",
-//                smallIcon = (json["smallIcon"] as? Int) ?: 0,
-//                largeIcon = (json["largeIcon"] as? Int) ?: 0,
-//                showLowBatteryNotification = (json["showLowBatteryNotification"] as? Boolean) ?: true,
-//                lowBatteryNotification = batteryConfigFromJson(json["lowBatteryNotificationConfig"] as Map<String, Any?>),
-//                showAssetIdTakenNotification = (json["showAssetIdTakenNotification"] as? Boolean) ?: true,
-//                contentAssetDisable = (json["contentAssetDisable"] as? String) ?: "Asset tracking stop content",
-//                assetIdTakenContent = (json["assetIdTakenContent"] as? String) ?: "Asset ID taken content"
-//            )
     }
 
     fun notificationConfigToJson(config: NotificationConfig): String {
         val gson = Gson()
         return gson.toJson(config, NotificationConfig::class.java)
-
-
-//            return mapOf(
-//                "serviceId" to config.serviceId,
-//                "channelId" to config.channelId,
-//                "channelName" to config.channelName,
-//                "title" to config.title,
-//                "content" to config.content,
-//                "smallIcon" to config.smallIcon,
-//                "largeIcon" to config.largeIcon,
-//                "showLowBatteryNotification" to config.showLowBatteryNotification,
-//                "lowBatteryNotificationConfig" to batteryConfigToJson(config.lowBatteryNotification),
-//                "showAssetIdTakenNotification" to config.showAssetIdTakenNotification,
-//                "contentAssetDisable" to config.contentAssetDisable,
-//                "assetIdTakenContent" to config.assetIdTakenContent
-//            )
     }
 
     fun batteryConfigFromJson(jsonString: String): LowBatteryNotificationConfig {
         val gson = Gson()
         return gson.fromJson(jsonString, LowBatteryNotificationConfig::class.java)
-//            return LowBatteryNotificationConfig(
-//                threshold = ((json["threshold"] as? Number)?.toDouble() ?: throw IllegalArgumentException("Threshold is required")).toFloat(),
-//                channelId = json["channelId"] as? String ?: throw IllegalArgumentException("ChannelId is required"),
-//                channelName = json["channelName"] as? String ?: throw IllegalArgumentException("ChannelName is required"),
-//                title = json["title"] as? String ?: throw IllegalArgumentException("Title is required"),
-//                content = json["content"] as? String ?: throw IllegalArgumentException("Content is required"),
-//                smallIcon = (json["smallIcon"] as? Int) ?: throw IllegalArgumentException("SmallIcon is required")
-//            )
     }
 
     fun batteryConfigToJson(config: LowBatteryNotificationConfig): String {
         val gson = Gson()
         return gson.toJson(config, LowBatteryNotificationConfig::class.java)
-
-//            return mapOf(
-//                "threshold" to config.threshold,
-//                "channelId" to config.channelId,
-//                "channelName" to config.channelName,
-//                "title" to config.title,
-//                "content" to config.content,
-//                "smallIcon" to config.smallIcon
-//            )
     }
 
     fun locationConfigFromJson(jsonString: String): LocationConfig {
@@ -185,27 +141,11 @@ object ConfigConverter {
     fun dataTrackingConfigFromJson(jsonString: String): DataTrackingConfig {
         val gson = Gson()
         return gson.fromJson(jsonString, DataTrackingConfig::class.java)
-
-//            return DataTrackingConfig(
-//                baseUrl = json["baseUrl"] as String,
-//                dataStorageSize = json["dataStorageSize"] as Int,
-//                dataUploadingBatchSize = json["dataUploadingBatchSize"] as Int,
-//                dataUploadingBatchWindow = json["dataUploadingBatchWindow"] as Int,
-//                shouldClearLocalDataWhenCollision = json["shouldClearLocalDataWhenCollision"] as Boolean
-//            )
     }
 
     fun dataTrackingConfigToJson(config: DataTrackingConfig): String {
         val gson = Gson()
         return gson.toJson(config, DataTrackingConfig::class.java)
-
-//            return mapOf(
-//                "baseUrl" to config.baseUrl,
-//                "dataStorageSize" to config.dataStorageSize,
-//                "dataUploadingBatchSize" to config.dataUploadingBatchSize,
-//                "dataUploadingBatchWindow" to config.dataUploadingBatchWindow,
-//                "shouldClearLocalDataWhenCollision" to config.shouldClearLocalDataWhenCollision
-//            )
     }
 
     fun assetProfileFromJson(json: String): AssetProfile {
@@ -234,5 +174,26 @@ object ConfigConverter {
         val jsonObject = (locationMap as Map<*, *>?)?.let { JSONObject(it) }
         return jsonObject.toString()
     }
+
+    fun tripProfileFromJson(json: String): TripProfile {
+        val gson = Gson()
+        return gson.fromJson(json, TripProfile::class.java)
+    }
+
+    fun tripUpdateProfileFromJson(json: String): TripUpdateProfile {
+        val gson = Gson()
+        return gson.fromJson(json, TripUpdateProfile::class.java)
+    }
+
+    fun tripToJson(trip: Trip): String {
+        val gson = Gson()
+        return gson.toJson(trip);
+    }
+
+    fun summaryToJson(summary: TripSummary): String {
+        val gson = Gson()
+        return gson.toJson(summary, TripSummary::class.java)
+    }
+
 
 }

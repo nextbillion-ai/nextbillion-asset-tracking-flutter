@@ -5,4 +5,6 @@ abstract class OnTrackingDataCallBack {
   void onLocationFailure(String message);
   void onTrackingStart(String message);
   void onTrackingStop(String message);
+  void onTripStatusChanged(String assetId, TripState state);
+
 }

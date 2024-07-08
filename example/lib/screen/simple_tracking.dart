@@ -8,6 +8,8 @@ import 'package:nb_asset_tracking_flutter_example/util/toast_mixin.dart';
 import 'package:uuid/uuid.dart';
 
 class SimpleTrackingExample extends StatefulWidget {
+  const SimpleTrackingExample({super.key});
+
   @override
   SimpleTrackingExampleState createState() => SimpleTrackingExampleState();
 }
@@ -41,7 +43,7 @@ class SimpleTrackingExampleState extends State<SimpleTrackingExample>
         toolbarHeight: 0,
       ),
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -153,5 +155,10 @@ class SimpleTrackingExampleState extends State<SimpleTrackingExample>
     super.dispose();
     assetTracking.removeDataListener(this);
     assetTracking.stopTracking();
+  }
+
+  @override
+  void onTripStatusChanged(String assetId, TripState state) {
+    // TODO: implement onTripStatusChanged
   }
 }

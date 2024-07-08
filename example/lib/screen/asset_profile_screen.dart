@@ -2,13 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
-import 'package:nb_asset_tracking_flutter_example/util/consts.dart';
 import 'package:nb_asset_tracking_flutter_example/util/toast_mixin.dart';
 import 'package:uuid/uuid.dart';
 
 class AssetProfileScreen extends StatefulWidget {
+  const AssetProfileScreen({super.key});
+
   @override
-  AssetProfileScreenState createState() => new AssetProfileScreenState();
+  AssetProfileScreenState createState() => AssetProfileScreenState();
 }
 
 class AssetProfileScreenState extends State<AssetProfileScreen> with ToastMixin {
@@ -19,11 +20,6 @@ class AssetProfileScreenState extends State<AssetProfileScreen> with ToastMixin 
   @override
   void initState() {
     super.initState();
-    initAssetTracking();
-  }
-
-  void initAssetTracking() {
-    assetTracking.initialize(apiKey: accessKey);
   }
 
   @override
@@ -33,7 +29,7 @@ class AssetProfileScreenState extends State<AssetProfileScreen> with ToastMixin 
         toolbarHeight: 0,
       ),
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
