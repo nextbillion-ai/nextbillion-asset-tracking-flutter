@@ -22,8 +22,14 @@ class AssetTracking {
     return _instance;
   }
 
-  Future<void> initialize({required String apiKey}) async {
-    await NbAssetTrackingFlutterPlatform.instance.initialize(key: apiKey);
+  Future<bool> initialize({required String apiKey}) async {
+    String jsonString  = await NbAssetTrackingFlutterPlatform.instance.initialize(key: apiKey);
+    return AssetResult.fromJson(jsonString).success;
+  }
+
+  Future<bool> setKeyOfHeaderField({required String key}) async {
+    String jsonString = await NbAssetTrackingFlutterPlatform.instance.setKeyOfHeaderField(key: key);
+    return AssetResult.fromJson(jsonString).success;
   }
 
   void addDataListener(OnTrackingDataCallBack callback) {
@@ -139,6 +145,46 @@ class AssetTracking {
     return AssetResult.fromJson(jsonString);
   }
 
+  Future<AssetResult<String>> startTrip({required TripProfile profile}) async {
+    String jsonString  = await _platform.startTrip(profile: profile);
+    return AssetResult.fromJson(jsonString);
+  }
+
+  Future<AssetResult<String>> endTrip() async {
+    String jsonString  = await _platform.endTrip();
+    return AssetResult.fromJson(jsonString);
+  }
+
+  Future<AssetResult<TripInfo>> getTrip({required String tripId})  async {
+    String jsonString  = await _platform.getTrip(tripId: tripId);
+    return AssetResult.fromJson(jsonString);
+  }
+
+  Future<AssetResult<String>> updateTrip({required TripUpdateProfile profile}) async {
+    String jsonString  = await _platform.updateTrip(profile: profile);
+    return AssetResult.fromJson(jsonString);
+  }
+
+  Future<AssetResult<TripSummary>> getSummary({required String tripId}) async {
+    String jsonString  = await _platform.getSummary(tripId: tripId);
+    return AssetResult.fromJson(jsonString);
+  }
+
+  Future<AssetResult<String>> deleteTrip({required String tripId}) async {
+    String jsonString  = await _platform.deleteTrip(tripId: tripId);
+    return AssetResult.fromJson(jsonString);
+  }
+
+  Future<AssetResult<String?>> getActiveTripId() async {
+    String jsonString  = await _platform.getActiveTripId();
+    return AssetResult.fromJson(jsonString);
+  }
+
+  Future<AssetResult<bool>> isTripInProgress() async {
+    String jsonString  = await _platform.isTripInProgress();
+    return AssetResult.fromJson(jsonString);
+  }
+
   void initNativeCallbacks() {
     _nativeCallbacks = NativeResultCallback(
       onLocationSuccess: (NBLocation location) {
@@ -161,6 +207,12 @@ class AssetTracking {
           listener.onTrackingStop.call(assetId);
         }
       },
+      onTripStatusChanged: (String tripId, TripState state) {
+        for (var listener in _listeners) {
+          listener.onTripStatusChanged.call(tripId, state);
+        }
+      },
+
     );
   }
 }

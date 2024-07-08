@@ -1,7 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nb_asset_tracking_flutter/src/nb_asset_tracking_flutter.dart';
 import 'package:nb_asset_tracking_flutter/src/nb_asset_tracking_flutter_platform_interface.dart';
-import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter_method_channel.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockNbAssetTrackingFlutterPlatform

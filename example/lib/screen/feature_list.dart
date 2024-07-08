@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:nb_asset_tracking_flutter/nb_asset_tracking_flutter.dart';
 import 'package:nb_asset_tracking_flutter_example/model/feature_model.dart';
 import 'package:nb_asset_tracking_flutter_example/screen/asset_profile_screen.dart';
 import 'package:nb_asset_tracking_flutter_example/screen/home_screen.dart';
 import 'package:nb_asset_tracking_flutter_example/screen/simple_tracking.dart';
 import 'package:nb_asset_tracking_flutter_example/screen/update_tracking_configuration.dart';
 
+import '../util/consts.dart';
+
 class FeatureListScreen extends StatefulWidget {
+  const FeatureListScreen({super.key});
+
   @override
-  FeatureListScreenState createState() => new FeatureListScreenState();
+  FeatureListScreenState createState() => FeatureListScreenState();
 }
 
 class FeatureListScreenState extends State<FeatureListScreen> {
@@ -22,6 +27,12 @@ class FeatureListScreenState extends State<FeatureListScreen> {
         "Asset Profile Operation Example", "Asset Profile related operation example of the Plugin integration"));
     features.add(
         FeatureModel("Update Tracking Configuration Example", "Example of updating the tracking related configuration"));
+
+    initAssetTracking();
+  }
+
+  void initAssetTracking() {
+    AssetTracking().initialize(apiKey: accessKey);
   }
 
   @override
@@ -58,7 +69,7 @@ class FeatureListScreenState extends State<FeatureListScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) {
-                return SimpleTrackingExample();
+                return const SimpleTrackingExample();
               }),
             );
             break;
@@ -66,7 +77,7 @@ class FeatureListScreenState extends State<FeatureListScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) {
-                return AssetProfileScreen();
+                return const AssetProfileScreen();
               }),
             );
             break;
@@ -74,7 +85,7 @@ class FeatureListScreenState extends State<FeatureListScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) {
-                return UpdateConfigurationExample();
+                return const UpdateConfigurationExample();
               }),
             );
             break;
@@ -89,15 +100,15 @@ class FeatureListScreenState extends State<FeatureListScreen> {
           children: [
             Text(
               featureModel.title,
-              style: TextStyle(fontSize: 15),
+              style: const TextStyle(fontSize: 15),
             ),
             Text(
               featureModel.subTitle,
-              style: TextStyle(fontSize: 12, color: Colors.grey),
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: Visibility(visible:index == 0, child: Divider()),
+              child: Visibility(visible:index == 0, child: const Divider()),
             )
           ],
         ),

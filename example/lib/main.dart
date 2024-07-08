@@ -8,7 +8,7 @@ Future<void> main() async {
   runApp(
     MaterialApp(
       navigatorKey: navigatorKey,
-      home: FeatureListScreen(),
+      home: const FeatureListScreen(),
     ),
   );
 }

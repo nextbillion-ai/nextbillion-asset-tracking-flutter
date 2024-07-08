@@ -20,6 +20,15 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
             if let accessKey = call.arguments as? String {
                 assetTracking.initialize(apiKey: accessKey)
                 result(AssetResult(success: true, data: accessKey, msg: "").toJson())
+            }else {
+                result(AssetResult(success: false, data: "", msg: "").toJson())
+            }
+        case "setKeyOfHeaderField":
+            if let header = call.arguments as? String {
+                assetTracking.initialize(apiKey: header)
+                result(AssetResult(success: true, data: header, msg: "").toJson())
+            }else {
+                result(AssetResult(success: false, data: "", msg: "").toJson())
             }
         case "getAssetId":
             let assetId = assetTracking.getAssetId()
@@ -27,7 +36,7 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
             
         case "getAssetDetail":
             assetTracking.getAssetDetail(completionHandler: {response in
-                let json = Convert.toJson(T: response.data)
+                let json = Convert.toJson(T: response)
                 result(AssetResult(success: true, data: json, msg: "").toJson())
                 
             }, errorHandler: { error in
@@ -35,7 +44,7 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
             })
         case "updateAsset":
             if let profileJson = call.arguments as? String,
-               let assetProfile: AssetProfile = Convert.decodeAssetProfileJson(profileJson: profileJson) {
+               let assetProfile: UpdateAssetProfile = Convert.decodeAssetUpdateProfileJson(profileJson: profileJson) {
                 assetTracking.updateAsset(assetProfile: assetProfile, completionHandler: {unit in
                     result(AssetResult(success: true, data: "", msg: "").toJson())
                 }, errorHandler: {error in
@@ -47,6 +56,8 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
                let data = Convert.decodeNotificationConfigJson(configJson: configJson) {
                 assetTracking.setNotificationConfig(config: data)
                 result(AssetResult(success: true, data: "", msg: "").toJson())
+            }else {
+                result(AssetResult(success: false, data: "", msg: "Data decode failure").toJson())
             }
             
         case "getIOSNotificationConfig":
@@ -59,6 +70,8 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
                let data = Convert.decodeLocationConfigJson(locationJson: configJson) {
                 assetTracking.updateLocationConfig(config: data)
                 result(AssetResult(success: true, data: "", msg: "").toJson())
+            } else {
+                result(AssetResult(success: false, data: "", msg: "Data decode failure").toJson())
             }
             
         case "setLocationConfig":
@@ -66,6 +79,8 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
                let data = Convert.decodeLocationConfigJson(locationJson: configJson) {
                 assetTracking.setLocationConfig(config: data)
                 result(AssetResult(success: true, data: "", msg: "").toJson())
+            } else {
+                result(AssetResult(success: false, data: "", msg: "Data decode failure").toJson())
             }
             
         case "getLocationConfig":
@@ -91,11 +106,13 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
         case "createAsset":
             if let profileJson = call.arguments as? String,
                let assetProfile = Convert.decodeAssetProfileJson(profileJson: profileJson) {
-                assetTracking.createAsset(assetProfile: assetProfile, completionHandler: {createResponse in
-                    result(AssetResult(success: true, data: createResponse.data.id, msg: "").toJson())
+                assetTracking.createAsset(assetProfile: assetProfile, completionHandler: {assetId in
+                    result(AssetResult(success: true, data: assetId, msg: "").toJson())
                 }, errorHandler: {error in
                     result(AssetResult(success: false, data: String(error.errorCode), msg: error.message).toJson())
                 })
+            }else {
+                result(AssetResult(success: false, data: "", msg: "Data decode failure").toJson())
             }
         case "bindAsset":
             if let assetId = call.arguments as? String {
@@ -106,6 +123,8 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
                     result(AssetResult(success: false, data: String(error.errorCode), msg: error.message).toJson())
                     
                 })
+            }else {
+                result(AssetResult(success: false, data: "", msg: "Data decode failure").toJson())
             }
         case "forceBindAsset":
             if let assetId = call.arguments as? String {
@@ -115,6 +134,8 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
                 }, errorHandler: {error in
                     result(AssetResult(success: false, data: String(error.errorCode), msg: error.message).toJson())
                 })
+            } else {
+                result(AssetResult(success: false, data: "", msg: "No assetId seted").toJson())
             }
             
         case "startTracking":
@@ -130,12 +151,95 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
                 if #available(iOS 15.0, *) {
                     assetTracking.setAllowFakeGps(allow: allow)
                     result(AssetResult(success: true, data: "", msg: "").toJson())
+                    return
                 }
             }
+            result(AssetResult(success: false, data: "", msg: "Value convert failure").toJson())
             
         case "getFakeGpsConfig":
             let allow = assetTracking.isAllowFakeGps()
             result(AssetResult(success: true, data: allow, msg: "").toJson())
+
+        case "startTrip":
+            if let profileJson = call.arguments as? String,
+               let profile = Convert.decodeTripProfileJson(profileJson: profileJson) {
+                assetTracking.startTrip(tripProfile: profile) { tripId in
+                    result(AssetResult(success: true, data: tripId, msg: "").toJson())
+                } errorHandler: { error in
+                    result(AssetResult(success: false, data: "", msg: error.message).toJson())
+                }
+
+            } else {
+                result(AssetResult(success: false, data: "", msg: "TripProfile decode falure").toJson())
+            }
+            break
+        case "endTrip":
+            assetTracking.endTrip { tripId in
+                result(AssetResult(success: true, data: tripId, msg: "").toJson())
+            } errorHandler: { error in
+                result(AssetResult(success: false, data: "", msg: error.message).toJson())
+            }
+           break
+        case "getTrip":
+            if let tripId = call.arguments as? String ,!tripId.isEmpty {
+                assetTracking.getTrip(tripId: tripId) { trip in
+                    result(AssetResult(success: true, data: trip, msg: "").toJson())
+                } errorHandler: { error in
+                    result(AssetResult(success: false, data: "", msg: error.message).toJson())
+                }
+            } else {
+                result(AssetResult(success: false, data: "", msg: "Trip ID is nil or Empty").toJson())
+            }
+           break
+        case "updateTrip":
+            if let profileJson = call.arguments as? String,
+               let profile = Convert.decodeUpdateTripProfileJson(profileJson: profileJson) {
+                assetTracking.updateTrip(tripId: nil, tripProfile: profile) { tripId in
+                    result(AssetResult(success: true, data: tripId, msg: "").toJson())
+                } errorHandler: { error in
+                    result(AssetResult(success: false, data: "", msg: error.message).toJson())
+                }
+
+            } else {
+                result(AssetResult(success: false, data: "UpdateTripProfile decode falure", msg: "").toJson())
+            }
+           break
+        case "getSummary":
+            if let tripId = call.arguments as? String ,!tripId.isEmpty {
+                assetTracking.tripSummaray(tripId: tripId) { summary in
+                    result(AssetResult(success: true, data: summary, msg: "").toJson())
+                } errorHandler: { error in
+                    result(AssetResult(success: false, data: "", msg: error.message).toJson())
+                }
+            } else {
+                result(AssetResult(success: false, data: "", msg: "Trip ID is nil or empty.").toJson())
+            }
+            break
+        case "deleteTrip":
+            if let tripId = call.arguments as? String,!tripId.isEmpty{
+                assetTracking.deleteTrip(tripId: tripId) { tripId in
+                    result(AssetResult(success: true, data: tripId, msg: "").toJson())
+                } errorHandler: { error in
+                    result(AssetResult(success: false, data: error.message, msg: error.message).toJson())
+                }
+
+            } else {
+                result(AssetResult(success: false, data:"Trip ID is nil or empty.", msg: "").toJson())
+            }
+           break
+        case "getActiveTripId":
+            if let tripId =  assetTracking.getActiveTripId() {
+                result(AssetResult(success: true, data: tripId, msg: "").toJson())
+            } else {
+                result(AssetResult(success: false, data: "", msg: "No active trip ID").toJson())
+            }
+            
+           break
+  
+        case "isTripInProgress":
+            let isInProgress = assetTracking.isTripInProgress()
+            result(AssetResult(success: true, data: isInProgress, msg: "").toJson())
+           break
 
         default:
             result(FlutterMethodNotImplemented)
@@ -143,7 +247,21 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
     }
 }
 
-extension NbAssetTrackingFlutterPlugin: AssetTrackingCallback {
+extension NbAssetTrackingFlutterPlugin: AssetTrackingDelegate {
+    public func onTripStatusChanged(tripId: String, status: NBAssetTracking.TripStatus) {
+        // Create a dictionary with tripId and status
+        let data = ["tripId": tripId, "status": status.name]
+           
+        // Create an AssetResult instance
+        let result = AssetResult(success: true, data: data, msg: "")
+           
+        // Convert the AssetResult instance to JSON
+        let jsonResult = result.toJson()
+           
+        // Invoke the Flutter method with the JSON result
+        NbAssetTrackingFlutterPlugin.channel?.invokeMethod("onTripStatusChanged", arguments: jsonResult)
+    }
+    
     public func onTrackingStart(assetId: String) {
         NbAssetTrackingFlutterPlugin.channel?.invokeMethod("onTrackingStart", arguments: AssetResult(success: true, data: assetId, msg: "").toJson())
     }

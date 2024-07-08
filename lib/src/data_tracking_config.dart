@@ -29,7 +29,6 @@ class DataTrackingConfig with NBEncode {
     );
   }
 
-  @override
   Map<String, dynamic> toJson() {
     return {
       'baseUrl': baseUrl,

@@ -133,14 +133,14 @@ class _CreateAsstScreenState extends State<CreateAssteScreen> with ToastMixin {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
                 okPressedCallback();
                 Navigator.of(context).pop();
               },
-              child: Text('Proceed'),
+              child: const Text('Proceed'),
             ),
           ],
         );

@@ -49,7 +49,6 @@ class AndroidNotificationConfig  with NBEncode {
     );
   }
 
-  @override
   Map<String, dynamic> toJson() {
       return {
         'serviceId': serviceId,

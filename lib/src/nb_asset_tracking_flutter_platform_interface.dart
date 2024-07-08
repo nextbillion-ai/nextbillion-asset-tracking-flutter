@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:nb_asset_tracking_flutter/src/data_tracking_config.dart';
 import 'package:nb_asset_tracking_flutter/src/default_config.dart';
 import 'package:nb_asset_tracking_flutter/src/ios_notification_config.dart';
 import 'package:nb_asset_tracking_flutter/src/android_notification_config.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:nb_asset_tracking_flutter/src/trips/trip_profile.dart';
+import 'package:nb_asset_tracking_flutter/src/trips/trip_update_profile.dart';
 
 import 'asset_profile.dart';
-import 'asset_result.dart';
 import 'location_config.dart';
 import 'native_result_callback.dart';
 import 'nb_asset_tracking_flutter_method_channel.dart';
@@ -35,6 +35,10 @@ abstract class NbAssetTrackingFlutterPlatform extends PlatformInterface {
 
    Future<String> initialize({required String key}) {
      throw UnimplementedError('initialize() has not been implemented.');
+   }
+
+   Future<String> setKeyOfHeaderField({required String key}) {
+     throw UnimplementedError('setKeyOfHeaderField() has not been implemented.');
    }
 
    void setupResultCallBack(NativeResultCallback callback) {
@@ -130,4 +134,37 @@ abstract class NbAssetTrackingFlutterPlatform extends PlatformInterface {
    Future<void> stopTracking() {
      throw UnimplementedError('stopTracking() has not been implemented.');
    }
+
+   Future<String> startTrip({required TripProfile profile}) {
+     throw UnimplementedError('startTrip() has not been implemented.');
+   }
+
+   Future<String> endTrip() {
+     throw UnimplementedError('endTrip() has not been implemented.');
+   }
+
+   Future<String> getTrip({required String tripId}) {
+     throw UnimplementedError('getTrip() has not been implemented.');
+   }
+
+   Future<String> updateTrip({required TripUpdateProfile profile}) {
+     throw UnimplementedError('getTrip() has not been implemented.');
+   }
+
+   Future<String> getSummary({required String tripId}) {
+     throw UnimplementedError('getSummary() has not been implemented.');
+   }
+
+   Future<String> deleteTrip({required String tripId}) {
+     throw UnimplementedError('deleteTrip() has not been implemented.');
+   }
+
+   Future<String> getActiveTripId() {
+     throw UnimplementedError('getActiveTripId() has not been implemented.');
+   }
+
+   Future<String> isTripInProgress() {
+     throw UnimplementedError('isTripInProgress() has not been implemented.');
+   }
+
 }

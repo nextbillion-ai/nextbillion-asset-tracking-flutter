@@ -29,7 +29,6 @@ class DefaultConfig with NBEncode {
     );
   }
 
-  @override
   Map<String, dynamic> toJson() {
     return {
       'enhanceService': enhanceService,

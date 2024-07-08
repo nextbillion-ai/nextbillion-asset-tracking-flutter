@@ -31,6 +31,10 @@ class AssetResult<T> {
       entity = IOSNotificationConfig.fromJson(data) as T;
     } else if (T == AssetDetailInfo) {
       entity = AssetDetailInfo.fromJson(data) as T;
+    } else if (T == TripSummary) {
+      entity = TripSummary.fromJson(data) as T;
+    } else if (T == TripInfo) {
+      entity = TripInfo.fromJson(data) as T;
     } else {
       entity = data as T;
     }

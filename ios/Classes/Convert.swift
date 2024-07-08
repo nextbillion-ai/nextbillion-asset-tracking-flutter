@@ -136,6 +136,19 @@ class Convert {
         }
     }
     
+    static func decodeAssetUpdateProfileJson(profileJson: String) -> UpdateAssetProfile? {
+        do {
+            let jsonData = profileJson.data(using: .utf8)
+            var jsonDictionary = try JSONSerialization.jsonObject(with: jsonData!) as! [String:Any]
+            jsonDictionary["assetDescription"] = jsonDictionary["description"]
+            let data = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
+            let assetProfile = try JSONDecoder().decode(UpdateAssetProfile.self, from: data) as UpdateAssetProfile
+            return assetProfile
+        } catch {
+            return nil
+        }
+    }
+    
     static func convertLocationToMap(location: CLLocation) -> String {
         let locationMap: [String: Any] = [
             "latitude": location.coordinate.latitude,
@@ -167,6 +180,32 @@ class Convert {
             return jsonString
         } catch {
             return ""
+        }
+    }
+    
+    static func decodeTripProfileJson(profileJson: String) -> TripProfile? {
+        do {
+            let jsonData = profileJson.data(using: .utf8)
+            var jsonDictionary = try JSONSerialization.jsonObject(with: jsonData!) as! [String:Any]
+            jsonDictionary["tripDescription"] = jsonDictionary["description"]
+            let data = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
+            let tripProfile = try JSONDecoder().decode(TripProfile.self, from: data) as TripProfile
+            return tripProfile
+        } catch {
+            return nil
+        }
+    }
+    
+    static func decodeUpdateTripProfileJson(profileJson: String) -> UpdateTripProfile? {
+        do {
+            let jsonData = profileJson.data(using: .utf8)
+            var jsonDictionary = try JSONSerialization.jsonObject(with: jsonData!) as! [String:Any]
+            jsonDictionary["tripDescription"] = jsonDictionary["description"]
+            let data = try JSONSerialization.data(withJSONObject: jsonDictionary, options: [])
+            let tripProfile = try JSONDecoder().decode(UpdateTripProfile.self, from: data) as UpdateTripProfile
+            return tripProfile
+        } catch {
+            return nil
         }
     }
     
