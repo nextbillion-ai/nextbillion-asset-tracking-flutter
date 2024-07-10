@@ -1,3 +1,9 @@
+## 1.0.1
+* Update iOS native framework to 1.0.3 to fix these issue
+    * Fix asset id check issue when start trip
+## 1.0.0
+* Trip implementation
+  * 
 ## 0.2.0
 * Update android native framework to 0.3.5 to fix these issue
     * Fix update asset api parameters issue
