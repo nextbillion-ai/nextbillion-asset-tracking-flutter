@@ -25,7 +25,7 @@ public class NbAssetTrackingFlutterPlugin: NSObject, FlutterPlugin {
             }
         case "setKeyOfHeaderField":
             if let header = call.arguments as? String {
-                assetTracking.initialize(apiKey: header)
+                assetTracking.setKeyOfHeader(headerName: header)
                 result(AssetResult(success: true, data: header, msg: "").toJson())
             }else {
                 result(AssetResult(success: false, data: "", msg: "").toJson())

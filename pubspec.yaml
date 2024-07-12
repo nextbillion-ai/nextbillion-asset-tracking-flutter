@@ -1,6 +1,6 @@
 name: nb_asset_tracking_flutter
 description: "A Flutter plugin for integrating NB AssetTracking inside a Flutter application on Android, iOS platforms."
-version: 1.0.1+6
+version: 1.0.2
 homepage: https://github.com/nextbillion-ai/nextbillion-ai-nextbillion-asset-tracking-flutter
 
 environment:
@@ -16,6 +16,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  test: any
+  mockito: any
 
 
 # For information on the generic Dart part of this file, see the
