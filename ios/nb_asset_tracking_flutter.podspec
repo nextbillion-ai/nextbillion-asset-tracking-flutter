@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'nb_asset_tracking_flutter'
-  s.version          = '1.0.1'
+  s.version          = '1.0.3'
   s.summary          = 'A new Flutter plugin project.'
   s.description      = <<-DESC
 A new Flutter plugin project.
