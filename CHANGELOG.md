@@ -1,7 +1,11 @@
+
+## 1.0.4
+* Update iOS native framework to 1.0.4 to fix these issue
+  * Fix location upload latency issue
+
 ## 1.0.3
 * Update android native framework to 1.0.4
   * Compatibility with Android 34
-
 ## 1.0.1
 * Update iOS native framework to 1.0.3 to fix these issue
     * Fix asset id check issue when start trip
