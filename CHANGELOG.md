@@ -1,3 +1,6 @@
+## 1.0.5
+* Update Android native framework to 1.0.5 to fix these issue
+  * Fix location upload latency issue on Android
 
 ## 1.0.4
 * Update iOS native framework to 1.0.4 to fix these issue
