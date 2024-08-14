@@ -1,5 +1,5 @@
 group 'ai.nextbillion.nb_asset_tracking_flutter'
-version '1.0.3'
+version '1.0.5'
 
 buildscript {
     ext.kotlin_version = '1.7.10'
@@ -50,7 +50,7 @@ android {
     }
 
     dependencies {
-        def nbPluginVersion = "1.0.4"
+        def nbPluginVersion = "1.0.5"
 
         implementation "ai.nextbillion:nb-asset-tracking:$nbPluginVersion"
         implementation 'com.google.code.gson:gson:2.9.0'
